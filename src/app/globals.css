@@ -1,0 +1,229 @@
+@import "tailwindcss";
+
+/*
+ * Ekram — design tokens
+ * Paper and ink carry the page. Signal orange is an accent only:
+ * one live element per view (a CTA, a status dot, a highlighted word).
+ */
+@theme {
+  --color-paper: #f4f5f7;
+  --color-white: #ffffff;
+  --color-mist: #e8eaee;
+  --color-ink: #0c0d10;
+  --color-graphite: #16181d;
+  --color-carbon: #1f2228;
+  --color-steel: #6a6f78;
+  --color-fog: #a9adb5;
+  --color-signal: #ff8b00;
+  --color-filament: #ffc90c;
+
+  --font-display: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+  --font-bangla: var(--font-hind), var(--font-inter), sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quint: cubic-bezier(0.83, 0, 0.17, 1);
+
+  --animate-float-slow: float 9s ease-in-out infinite;
+  --animate-spin-slow: spin 24s linear infinite;
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-pulse-dot: pulse-dot 2.4s ease-in-out infinite;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(0, -8px, 0);
+    }
+  }
+  @keyframes marquee {
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgb(255 139 0 / 0.45);
+    }
+    50% {
+      box-shadow: 0 0 0 6px rgb(255 139 0 / 0);
+    }
+  }
+}
+
+:root {
+  --gutter: clamp(1rem, 3.2vw, 2.5rem);
+  --shadow-object: 0 1px 0 rgb(255 255 255 / 0.9) inset, 0 1px 2px rgb(12 13 16 / 0.06),
+    0 8px 24px -8px rgb(12 13 16 / 0.18);
+  --shadow-float: 0 1px 1px rgb(12 13 16 / 0.04), 0 12px 28px -10px rgb(12 13 16 / 0.18),
+    0 40px 80px -30px rgb(12 13 16 / 0.28);
+  color-scheme: light;
+}
+
+html {
+  background: var(--color-paper);
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01", "ss03";
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-filament);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Custom cursor hides the native one only on fine pointers, never on fields. */
+html.has-cursor,
+html.has-cursor * {
+  cursor: none;
+}
+html.has-cursor input,
+html.has-cursor textarea {
+  cursor: text;
+}
+
+@layer components {
+  .shell {
+    width: 100%;
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .display {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    line-height: 0.92;
+  }
+
+  .hairline {
+    border-color: rgb(12 13 16 / 0.09);
+  }
+  .hairline-dark {
+    border-color: rgb(255 255 255 / 0.09);
+  }
+
+  /* Physical button: a slab with a lit top edge and a soft cast shadow. */
+  .btn-object {
+    box-shadow: var(--shadow-object);
+    transition:
+      transform 0.5s var(--ease-out-expo),
+      box-shadow 0.5s var(--ease-out-expo),
+      background-color 0.3s ease;
+  }
+  .btn-object:hover {
+    box-shadow:
+      0 1px 0 rgb(255 255 255 / 0.9) inset,
+      0 2px 4px rgb(12 13 16 / 0.06),
+      0 18px 36px -12px rgb(12 13 16 / 0.28);
+  }
+  .btn-object:active {
+    transform: translateY(1px) scale(0.985);
+    box-shadow:
+      0 1px 0 rgb(255 255 255 / 0.6) inset,
+      0 1px 2px rgb(12 13 16 / 0.12);
+  }
+
+  .panel-glass {
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.78), rgb(255 255 255 / 0.62));
+    backdrop-filter: blur(18px) saturate(1.4);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+    border: 1px solid rgb(255 255 255 / 0.7);
+    box-shadow: var(--shadow-float);
+  }
+
+  /* Technical grid used behind the hero and a few stages. */
+  .grid-field {
+    background-image:
+      linear-gradient(to right, rgb(12 13 16 / 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(12 13 16 / 0.045) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+  .grid-field-dark {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.04) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+
+  .noise::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+/* Project visual morph between home and case study. */
+::view-transition-group(.morph) {
+  animation-duration: 650ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+::view-transition-image-pair(.morph) {
+  animation-name: via-blur;
+}
+@keyframes via-blur {
+  35% {
+    filter: blur(4px);
+  }
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 380ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
